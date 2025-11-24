@@ -1,0 +1,60 @@
+{% extends 'game/base.html' %}
+
+{% block content %}
+<h1>🏏 Game Result</h1>
+
+<div class="{% if winner == 'You Won! 🏆' %}win{% else %}lost{% endif %}">
+    <h2>{{ winner }}</h2>
+</div>
+
+<p>Your Final Score: <b>{{ user_score }}</b></p>
+<p>System Final Score: <b>{{ system_score }}</b></p>
+
+<a href="/"><button>Play Again</button></a>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.win h2 {
+    color: #00ff00;
+    text-shadow: 0 0 20px #00ff00, 0 0 40px #00ff00, 0 0 60px #00ff00;
+    animation: glow 1s infinite alternate;
+}
+
+.lost h2 {
+    color: red;
+    text-shadow: 0 0 10px #ff0000, 0 0 20px #ff4500, 0 0 30px #ff6347;
+    animation: shake 0.5s infinite;
+    position: relative;
+}
+
+.lost::after {
+    content: "🔥🔥🔥🔥🔥";
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2rem;
+    animation: fire 1s infinite;
+}
+
+@keyframes glow {
+    from { text-shadow: 0 0 20px #00ff00; }
+    to   { text-shadow: 0 0 40px #00ff00, 0 0 80px #00ff00; }
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+}
+
+@keyframes fire {
+    0% { top: -40px; opacity: 1; }
+    50% { top: -50px; opacity: 0.6; }
+    100% { top: -60px; opacity: 0; }
+}
+</style>
+{% endblock %}

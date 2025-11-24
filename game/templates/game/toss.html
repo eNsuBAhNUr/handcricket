@@ -1,0 +1,12 @@
+{% extends 'game/base.html' %}
+
+{% block content %}
+<h2>🎲 Toss</h2>
+<p>Pick Heads or Tails:</p>
+
+<form method="POST">
+    {% csrf_token %}
+    <button name="call" value="heads">Heads</button>
+    <button name="call" value="tails">Tails</button>
+</form>
+{% endblock %}

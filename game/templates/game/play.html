@@ -1,0 +1,89 @@
+{% extends 'game/base.html' %}
+
+{% block content %}
+<h1>🏏 Hand Cricket Game</h1>
+
+{% if request.session.game_over %}
+<div id="winner-msg" class="{% if request.session.winner == 'You Won! 🏆' %}win{% else %}lost{% endif %}">
+    <h2>{{ request.session.winner }}</h2>
+</div>
+<a href="/result/"><button>See Result</button></a>
+
+{% else %}
+<p><b>{{ batting|title }}</b> is batting now!</p>
+
+{% if user_num %}
+<div style="margin-bottom:20px;">
+    <p>You played: <b>{{ user_num }}</b></p>
+    <p>System played: <b>{{ system_num }}</b></p>
+</div>
+<hr>
+{% endif %}
+
+<p>Your Score: {{ user_score }} | System Score: {{ system_score }}</p>
+
+{% if batting == 'system' %}
+<p>System needs {{ runs_needed }} more run{{ runs_needed|pluralize }} to win!</p>
+{% endif %}
+
+<form method="POST">
+    {% csrf_token %}
+    <button name="run" value="1">1 ✊</button>
+    <button name="run" value="2">2 ✌️</button>
+    <button name="run" value="3">3 🤟</button>
+    <button name="run" value="4">4 ✋</button>
+    <button name="run" value="5">5 🖐️</button>
+    <button name="run" value="6">6 🤚</button>
+</form>
+{% endif %}
+{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Green Win Animation */
+.win h2 {
+    color: #00ff00;
+    text-shadow: 0 0 20px #00ff00, 0 0 40px #00ff00, 0 0 60px #00ff00;
+    animation: glow 1s infinite alternate;
+}
+
+/* Red Lost Animation + fire effect */
+.lost h2 {
+    color: red;
+    text-shadow: 0 0 10px #ff0000, 0 0 20px #ff4500, 0 0 30px #ff6347;
+    animation: shake 0.5s infinite;
+    position: relative;
+}
+
+/* Fire particles */
+.lost::after {
+    content: "🔥🔥🔥🔥🔥";
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2rem;
+    animation: fire 1s infinite;
+}
+
+/* Animations */
+@keyframes glow {
+    from { text-shadow: 0 0 20px #00ff00; }
+    to   { text-shadow: 0 0 40px #00ff00, 0 0 80px #00ff00; }
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+}
+
+@keyframes fire {
+    0% { top: -40px; opacity: 1; }
+    50% { top: -50px; opacity: 0.6; }
+    100% { top: -60px; opacity: 0; }
+}
+</style>
+{% endblock %}
